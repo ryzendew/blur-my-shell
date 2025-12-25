@@ -9,6 +9,7 @@ import { DownscaleEffect } from './downscale.js';
 import { UpscaleEffect } from './upscale.js';
 import { PixelizeEffect } from './pixelize.js';
 import { DerivativeEffect } from './derivative.js';
+import { LuminosityEffect } from "./luminosity.js";
 import { RgbToHslEffect } from './rgb_to_hsl.js';
 import { HslToRgbEffect } from './hsl_to_rgb.js';
 
@@ -33,6 +34,7 @@ export function get_effects_groups(_ = _ => "") {
                 "derivative",
                 "noise",
                 "color",
+                "luminosity",
                 "rgb_to_hsl",
                 "hsl_to_rgb"
             ]
@@ -284,6 +286,35 @@ export function get_supported_effects(_ = () => "") {
                     type: "float",
                     min: 0.,
                     max: 2.,
+                    increment: 0.01,
+                    big_increment: 0.1,
+                    digits: 2
+                }
+            }
+        },
+
+        luminosity: {
+            class: LuminosityEffect,
+            name: _("Luminosity (advanced effect)"),
+            description: _("Scales luminosity to a more consistent value for legibility."),
+            is_advanced: true,
+            editable_params: {
+                luminosity: {
+                    name: _("Target luminosity"),
+                    description: _("Desired luminosity value for all pixels."),
+                    type: "float",
+                    min: 0.,
+                    max: 1.,
+                    increment: 0.01,
+                    big_increment: 0.1,
+                    digits: 2
+                },
+                blend: {
+                    name: _("Blend"),
+                    description: _("How strongly the effect is applied. Higher means more consistent luminosity, so more legibility."),
+                    type: "float",
+                    min: 0.,
+                    max: 1.,
                     increment: 0.01,
                     big_increment: 0.1,
                     digits: 2
