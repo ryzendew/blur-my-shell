@@ -335,7 +335,6 @@ export const ApplicationsBlur = class ApplicationsBlur {
             this.focused_window_pid = new_pid;
             // if we have blur, hide it and make the window opaque
             if (this.settings.applications.DYNAMIC_OPACITY && blur_actor) {
-                // TODO: Maybe add a setting to keep the blur effect on opaque windows (for transparent GTK themes)
                 blur_actor.hide();
                 this.set_window_opacity(window_actor, 255);
             }
@@ -426,7 +425,6 @@ export const ApplicationsBlur = class ApplicationsBlur {
         this.enable()
     }
 
-    // TODO: Same as above
     change_pipeline() {
         this.disable();
         this.enable()
