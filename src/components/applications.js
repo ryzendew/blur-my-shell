@@ -124,6 +124,10 @@ export const ApplicationsBlur = class ApplicationsBlur {
     /// needed.
     /// Accepts only untracked meta windows (i.e no `bms_pid` set)
     track_new(meta_window) {
+        // skip if already tracked
+        if (meta_window.bms_pid)
+            return;
+
         const pid = ("" + Math.random()).slice(2, 16);
         meta_window.bms_pid = pid;
 
@@ -163,7 +167,9 @@ export const ApplicationsBlur = class ApplicationsBlur {
         if (this.meta_window_map.has(pid)) {
             const meta_window = this.meta_window_map.get(pid);
             const blur_actor = meta_window.blur_actor;
-            if (blur_actor) {
+            const window_actor = meta_window.get_compositor_private();
+
+            if (blur_actor && window_actor) {
                 if (this.settings.applications.STATIC_BLUR) {
                     const scale = this.compute_scale(meta_window);
                     const frame = meta_window.get_frame_rect();
@@ -243,6 +249,10 @@ export const ApplicationsBlur = class ApplicationsBlur {
     create_blur_effect(meta_window) {
         const pid = meta_window.bms_pid;
         const window_actor = meta_window.get_compositor_private();
+
+        // safety check - window actor must exist
+        if (!window_actor)
+            return;
 
         let blur_actor;
 
@@ -421,10 +431,15 @@ export const ApplicationsBlur = class ApplicationsBlur {
     }
 
     reset() {
-        this._log("resetting...");
+        this._log("switching blur type...");
 
-        this.disable();
-        setTimeout(_ => this.enable(), 1);
+        // instead of full disable/enable cycle, just recreate blur effects with new type
+        this.meta_window_map.forEach((meta_window, pid) => {
+            // remove existing blur
+            this.remove_blur(pid);
+            // check if window should still be blurred and recreate with new type
+            this.check_blur(meta_window);
+        });
     }
 
     /// Removes the blur actor to make a blurred window become normal again.
