@@ -109,6 +109,32 @@
         </child>
 
         <child>
+          <object class="AdwActionRow" id="corner_radius_not_found_row">
+            <property name="title" translatable="yes">Corner radius</property>
+            <property name="subtitle" translatable="yes">In order to use rounded corners, please install the GNOME Rounded Blur library.</property>
+            <property name="sensitive" bind-source="blur" bind-property="state" bind-flags="sync-create" />
+            <property name="activatable-widget">open_gnome_rounded_blur</property>
+
+            <child type="suffix">
+              <object class="GtkButton" id="open_gnome_rounded_blur">
+                <property name="icon-name">adw-external-link-symbolic</property>
+                <property name="valign">center</property>
+                <property name="action-name">link.open-gnome-rounded-blur</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="AdwSpinRow" id="corner_radius_row">
+            <property name="title" translatable="yes">Corner radius</property>
+            <property name="subtitle" translatable="yes">Radius for the corner rounding effect.</property>
+            <property name="adjustment">corner_radius</property>
+            <property name="sensitive" bind-source="blur" bind-property="state" bind-flags="sync-create" />
+          </object>
+        </child>
+
+        <child>
           <object class="AdwActionRow">
             <property name="title" translatable="yes">Force light text</property>
             <property name="subtitle" translatable="yes">Use a light text for the panel, useful when using gnome-shell's light theme.</property>
@@ -148,8 +174,8 @@ Recommended unless you want to customize your GNOME theme.</property>
 
             <child>
               <object class="AdwActionRow">
-                <property name="title" translatable="yes">Disable when a window is near</property>
-                <property name="subtitle" translatable="yes">Disables the transparency of the panel when a window is near it.</property>
+                <property name="title" translatable="yes">Override background dynamically</property>
+                <property name="subtitle" translatable="yes">Override the background of the panel and apply certain effect when a window is near it.</property>
                 <property name="activatable-widget">override_background_dynamically</property>
 
                 <child>
@@ -159,6 +185,52 @@ Recommended unless you want to customize your GNOME theme.</property>
                 </child>
               </object>
             </child>
+
+            <child>
+              <object class="AdwActionRow" id="override_background_dynamically_mode_row">
+                <property name="title" translatable="yes">When window is near:</property>
+                <property name="subtitle" translatable="yes">Blur on Window Proximity: Blur only when a window is near the panel and transparent when it is not. 
+Background on Window Proximity: Solid color background when a window is near the panel and blur when it is not</property>
+                <property name="activatable-widget">override_background_dynamically_mode</property>
+
+                <child>
+                  <object class="GtkDropDown" id="override_background_dynamically_mode">
+                    <property name="valign">center</property>
+                    <property name="model">override_background_dynamically_mode_model</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+
+            <child>
+              <object class="AdwActionRow" id="gradient_panel_row">
+                <property name="title" translatable="yes">Gradient background</property>
+                <property name="subtitle" translatable="yes">Apply a gradient effect to the panel background.</property>
+                <property name="activatable-widget">gradient_panel</property>
+
+                <child>
+                  <object class="GtkSwitch" id="gradient_panel">
+                    <property name="valign">center</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+
+            <child>
+              <object class="AdwActionRow" id="gradient_panel_mode_row">
+                <property name="title" translatable="yes">Gradient direction</property>
+                <property name="subtitle" translatable="yes">Change the direction of the gradient background.</property>
+                <property name="activatable-widget">gradient_panel_mode</property>
+
+                <child>
+                  <object class="GtkDropDown" id="gradient_panel_mode">
+                    <property name="valign">center</property>
+                    <property name="model">gradient_panel_mode_model</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+
           </object>
         </child>
 
@@ -226,6 +298,20 @@ Recommended unless you want to customize your GNOME theme.</property>
     </items>
   </object>
 
+  <object class="GtkStringList" id="override_background_dynamically_mode_model">
+    <items>
+      <item translatable="yes">Blur on Window Proximity</item>
+      <item translatable="yes">Background on Window Proximity</item>
+    </items>
+  </object>
+
+  <object class="GtkStringList" id="gradient_panel_mode_model">
+    <items>
+      <item translatable="yes">Top</item>
+      <item translatable="yes">Bottom</item>
+    </items>
+  </object>
+
   <object class="GtkAdjustment" id="sigma">
     <property name="lower">0</property>
     <property name="upper">100</property>
@@ -236,5 +322,11 @@ Recommended unless you want to customize your GNOME theme.</property>
     <property name="lower">0.0</property>
     <property name="upper">1.0</property>
     <property name="step-increment">0.01</property>
+  </object>
+
+  <object class="GtkAdjustment" id="corner_radius">
+    <property name="lower">0</property>
+    <property name="upper">150</property>
+    <property name="step-increment">1</property>
   </object>
 </interface>
